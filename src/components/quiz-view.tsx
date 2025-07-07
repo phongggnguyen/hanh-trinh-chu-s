@@ -79,6 +79,19 @@ export function QuizView({ province, onComplete, onExit }: QuizViewProps) {
     }, 1500); // Wait 1.5s before next question
   };
 
+  const getButtonClass = (option: string) => {
+    if (!selectedAnswer) {
+      return 'bg-white hover:bg-amber-100/50 text-slate-700 border-slate-200';
+    }
+    if (option === currentQuestion.correctAnswer) {
+      return 'bg-green-500 text-white border-green-600 ring-4 ring-green-500/50';
+    }
+    if (option === selectedAnswer) {
+      return 'bg-red-500 text-white border-red-600';
+    }
+    return 'bg-slate-100 text-slate-500 border-slate-200 opacity-60';
+  };
+
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center h-full gap-4">
@@ -105,13 +118,6 @@ export function QuizView({ province, onComplete, onExit }: QuizViewProps) {
 
   const currentQuestion = questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
-
-  const getButtonClass = (option: string) => {
-    if (!selectedAnswer) return 'bg-white hover:bg-gray-100';
-    if (option === currentQuestion.correctAnswer) return 'bg-green-500 hover:bg-green-500 text-white';
-    if (option === selectedAnswer) return 'bg-red-500 hover:bg-red-500 text-white';
-    return 'bg-white opacity-50';
-  }
 
   return (
     <>
@@ -150,10 +156,10 @@ export function QuizView({ province, onComplete, onExit }: QuizViewProps) {
                     key={index}
                     onClick={() => handleAnswerSelect(option)}
                     disabled={!!selectedAnswer}
-                    className={`h-auto p-4 text-lg rounded-lg transition-all duration-300 transform hover:scale-105 shadow ${getButtonClass(option)}`}
+                    className={`h-auto p-4 text-lg rounded-lg transition-all duration-300 justify-start text-left shadow-sm border-2 ${getButtonClass(option)}`}
                   >
-                    <span className="font-bold mr-2">{String.fromCharCode(65 + index)}.</span>
-                    <span className="text-left flex-1 whitespace-normal">{option}</span>
+                    <span className="font-bold mr-3">{String.fromCharCode(65 + index)}.</span>
+                    <span className="flex-1 whitespace-normal">{option}</span>
                   </Button>
                 ))}
               </div>
@@ -163,8 +169,8 @@ export function QuizView({ province, onComplete, onExit }: QuizViewProps) {
         
         <footer className="mt-4 flex justify-between items-center">
           <div className="flex gap-2">
-            <Button variant="outline" className="bg-white/80"><Bomb className="mr-2"/> 50/50</Button>
-            <Button variant="outline" className="bg-white/80"><Clock className="mr-2"/> +15s</Button>
+            <Button variant="outline" className="bg-white/80" disabled><Bomb className="mr-2"/> 50/50</Button>
+            <Button variant="outline" className="bg-white/80" disabled><Clock className="mr-2"/> +15 giây</Button>
           </div>
           <div className="text-2xl font-bold bg-white/80 px-4 py-2 rounded-full shadow-md w-20 h-20 flex items-center justify-center border-4 border-primary">
             {timeLeft}

@@ -42,6 +42,8 @@ const prompt = ai.definePrompt({
   prompt: `You are an expert quiz question generator specializing in Vietnamese provinces.
 
   Generate {{numberOfQuestions}} quiz questions about the province of {{provinceName}}.
+  All questions, options, and the correct answer MUST be in Vietnamese.
+
   The quiz questions should cover a range of topics, including local knowledge, history, culture, and geography.
 
   Each question should have 4 answer options, and one correct answer.
@@ -51,17 +53,17 @@ const prompt = ai.definePrompt({
   \nExample:\n{
     "questions": [
       {
-        "question": "What is the capital of Vietnam?",
-        "options": ["Hanoi", "Ho Chi Minh City", "Da Nang", "Can Tho"],
-        "correctAnswer": "Hanoi"
+        "question": "Đâu là thủ đô của Việt Nam?",
+        "options": ["Hà Nội", "Thành phố Hồ Chí Minh", "Đà Nẵng", "Cần Thơ"],
+        "correctAnswer": "Hà Nội"
       }
     ]
   }
   \nMake sure to include different types of questions, such as:
-  * Knowledge-based questions (e.g., "What is the capital of [Province]?")
-  * Image-based questions (e.g., "Which of the following images shows a famous landmark in [Province]?")
-  * Audio-based questions (e.g., "Which of the following songs is a traditional folk song from [Province]?")
-  * Questions about local language/dialects (e.g., "What does the word '[local word]' mean in the [Province] dialect?")`,
+  * Knowledge-based questions (e.g., "Đâu là thủ phủ của tỉnh [Tên Tỉnh]?")
+  * Image-based questions (e.g., "Hình ảnh nào sau đây cho thấy một địa danh nổi tiếng ở [Tên Tỉnh]?")
+  * Audio-based questions (e.g., "Bài hát nào sau đây là một bài hát dân ca truyền thống của [Tên Tỉnh]?")
+  * Questions about local language/dialects (e.g., "Từ '[từ địa phương]' có nghĩa là gì trong phương ngữ [Tên Tỉnh]?")`,
 });
 
 const generateQuizQuestionsFlow = ai.defineFlow(

@@ -25,10 +25,10 @@ export function QuizCompletionModal({ isOpen, onClose, provinceName, isSuccess, 
             }
           </div>
           <DialogTitle className="text-2xl font-bold">
-            {isSuccess ? 'Chúc Mừng!' : 'Thử Lại Nhé!'}
+            {isSuccess ? 'Chúc mừng!' : 'Cố gắng lần sau!'}
           </DialogTitle>
           <DialogDescription className="text-md mt-2">
-            {isSuccess ? `Bạn đã chinh phục thành công tỉnh ${provinceName}!` : `Bạn chưa chinh phục được tỉnh ${provinceName}.`}
+            {isSuccess ? `Bạn đã chinh phục thành công tỉnh ${provinceName}!` : `Rất tiếc, bạn chưa chinh phục được tỉnh ${provinceName}.`}
             <br/>
             Kết quả của bạn: <strong className="text-primary">{score}/{totalQuestions}</strong>
           </DialogDescription>
@@ -49,7 +49,7 @@ export function QuizCompletionModal({ isOpen, onClose, provinceName, isSuccess, 
         )}
         <DialogFooter className="mt-6 sm:justify-center">
           <Button onClick={onClose} size="lg" className="bg-primary hover:bg-primary/90">
-            Tiếp Tục Hành Trình
+            Tiếp tục hành trình
           </Button>
         </DialogFooter>
       </DialogContent>

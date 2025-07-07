@@ -35,7 +35,7 @@ const generateQuizImagesFlow = ai.defineFlow(
     const {media} = await ai.generate({
       // IMPORTANT: ONLY the googleai/gemini-2.0-flash-preview-image-generation model is able to generate images.
       model: 'googleai/gemini-2.0-flash-preview-image-generation',
-      prompt: `Generate an image related to the following quiz question: ${input.question}`,
+      prompt: `Generate a photorealistic and culturally relevant image for the following Vietnamese quiz question: "${input.question}"`,
       config: {
         responseModalities: ['TEXT', 'IMAGE'], // MUST provide both TEXT and IMAGE, IMAGE only won't work
       },
