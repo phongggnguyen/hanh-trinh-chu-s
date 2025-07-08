@@ -3,7 +3,7 @@
 ## Giới thiệu
 
 Hành trình chữ S là một game đố vui tương tác hấp dẫn, đưa người chơi vào cuộc phiêu lưu khám phá địa lý, văn hóa và lịch sử đa dạng của Việt Nam. Được xây dựng trên nền tảng Next.js, game sử dụng bản đồ tương tác của Việt Nam để người chơi di chuyển và khám phá từng tỉnh thành. Với đồ họa trực quan và lối chơi lôi cuốn, game không chỉ mang tính giải trí mà còn giúp người chơi mở rộng kiến thức về đất nước hình chữ S.
-
+Link demo: https://hanh-trinh-chu-s.vercel.app/
 ## Cài đặt
 
 ### Yêu cầu hệ thống
