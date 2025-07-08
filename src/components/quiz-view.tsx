@@ -121,7 +121,7 @@ export function QuizView({ province, onComplete, onExit }: QuizViewProps) {
 
   return (
     <>
-      <div className="relative flex flex-col h-full p-4 md:p-8 bg-gray-100 rounded-lg animate-fade-in">
+      <div className="relative flex flex-col p-4 md:p-8 bg-gray-100 rounded-lg animate-fade-in">
         <Button onClick={onExit} variant="ghost" size="icon" className="absolute top-4 right-4 z-10">
           <X className="w-6 h-6" />
         </Button>

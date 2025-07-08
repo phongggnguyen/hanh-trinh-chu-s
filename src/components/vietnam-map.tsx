@@ -20,12 +20,12 @@ export function VietnamMap({ onProvinceSelect }: VietnamMapProps) {
   };
 
   return (
-    <div className="w-full h-full flex items-center justify-center">
+    <div className="w-full min-h-[500px] flex items-center justify-center">
       <TooltipProvider>
         <svg
           viewBox="350 100 300 650"
           xmlns="http://www.w3.org/2000/svg"
-          className="w-full h-full object-contain"
+          className="w-full h-full max-h-[80vh] object-contain"
           aria-label="Bản đồ Việt Nam"
         >
           <defs>
