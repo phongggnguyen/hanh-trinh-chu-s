@@ -8,8 +8,18 @@
  * - GenerateQuizImagesOutput - The return type for the generateQuizImages function.
  */
 
-import {ai} from '@/ai/genkit';
+import {genkit} from 'genkit';
+import {googleAI} from '@genkit-ai/googleai';
 import {z} from 'genkit';
+
+// Create separate AI instance for image generation with dedicated API key
+const imageAI = genkit({
+  plugins: [
+    googleAI({
+      apiKey: process.env.GOOGLE_GENAI_IMAGE_API_KEY || process.env.GOOGLE_GENAI_API_KEY,
+    })
+  ],
+});
 
 const GenerateQuizImagesInputSchema = z.object({
   question: z.string().describe('The quiz question to generate an image for.'),
@@ -25,16 +35,17 @@ export async function generateQuizImages(input: GenerateQuizImagesInput): Promis
   return generateQuizImagesFlow(input);
 }
 
-const generateQuizImagesFlow = ai.defineFlow(
+const generateQuizImagesFlow = imageAI.defineFlow(
   {
     name: 'generateQuizImagesFlow',
     inputSchema: GenerateQuizImagesInputSchema,
     outputSchema: GenerateQuizImagesOutputSchema,
   },
   async input => {
-    const {media} = await ai.generate({
-      // IMPORTANT: ONLY the googleai/gemini-2.0-flash-preview-image-generation model is able to generate images.
-      model: 'googleai/gemini-2.0-flash-preview-image-generation',
+    const {media} = await imageAI.generate({
+      // IMPORTANT: ONLY the googleai/gemini-2.5-flash-image model is able to generate images.
+      // model: 'googleai/gemini-2.5-flash-image',
+      model: 'googleai/gemini‑2.5‑flash‑image‑preview',
       prompt: `Generate a photorealistic and culturally relevant image for the following Vietnamese quiz question: "${input.question}"`,
       config: {
         responseModalities: ['TEXT', 'IMAGE'], // MUST provide both TEXT and IMAGE, IMAGE only won't work

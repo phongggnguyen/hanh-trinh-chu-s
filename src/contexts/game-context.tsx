@@ -5,7 +5,7 @@ import { PROVINCES, findProvinceById } from '@/lib/provinces';
 import type { GameState, GameAction, Province } from '@/lib/types';
 
 const initialState: GameState = {
-  unlocked: new Set(['ha-noi', 'ho-chi-minh', 'da-nang']), // Start with 3 major cities
+  unlocked: new Set(['ha-noi', 'ho-chi-minh']), // Start with Ha Noi and Ho Chi Minh City
   conquered: new Set(),
 };
 
@@ -41,7 +41,7 @@ const LOCAL_STORAGE_KEY = 'vietnamQuestGameState';
 export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isInitialized, setIsInitialized] = useState(false);
 
-  const [state, dispatch] = useReducer(gameReducer, initialState, (initial) => {
+  const [state, dispatch] = useReducer(gameReducer, initialState, (initial): GameState => {
     if (typeof window === 'undefined') {
       return initial;
     }
@@ -50,8 +50,8 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (savedState) {
         const parsed = JSON.parse(savedState);
         return {
-          unlocked: new Set(parsed.unlocked),
-          conquered: new Set(parsed.conquered),
+          unlocked: new Set<string>(parsed.unlocked),
+          conquered: new Set<string>(parsed.conquered),
         };
       }
     } catch (error) {

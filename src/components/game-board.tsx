@@ -9,7 +9,7 @@ import { VietnamMap } from './vietnam-map';
 import { QuizView } from './quiz-view';
 import { TravelJournal } from './travel-journal';
 import { Button } from '@/components/ui/button';
-import { BookOpen, Settings } from 'lucide-react';
+import { BookOpen, Settings, RotateCcw } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -17,6 +17,17 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function GameBoard() {
@@ -39,7 +50,12 @@ export function GameBoard() {
   
   const handleExitQuiz = () => {
     setActiveQuizProvince(null);
-  }
+  };
+
+  const handleResetGame = () => {
+    localStorage.removeItem('vietnamQuestGameState');
+    window.location.reload();
+  };
 
   return (
     <ScrollArea className="relative w-full max-w-5xl h-[95vh] bg-white/50 shadow-2xl rounded-2xl border-4 border-white">
@@ -61,9 +77,52 @@ export function GameBoard() {
                 <TravelJournal />
               </SheetContent>
             </Sheet>
-            <Button variant="ghost" size="icon">
-              <Settings className="w-6 h-6" />
-            </Button>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <Settings className="w-6 h-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>Cài Đặt</SheetTitle>
+                </SheetHeader>
+                <div className="py-6 space-y-4">
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="destructive" className="w-full">
+                        <RotateCcw className="w-4 h-4 mr-2" />
+                        Reset Game
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Bạn có chắc muốn reset game?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Hành động này sẽ xóa toàn bộ tiến trình của bạn và không thể hoàn tác.
+                          Bạn sẽ phải bắt đầu lại từ đầu với Hà Nội và TP. Hồ Chí Minh.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Hủy</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleResetGame}>
+                          Xác nhận
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+
+                  <div className="pt-4 border-t">
+                    <p className="text-sm text-muted-foreground">
+                      Phiên bản: 1.0.0
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      © 2025 Hành Trình Chữ S
+                    </p>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </header>
 

@@ -30,6 +30,8 @@ export function QuizView({ province, onComplete, onExit }: QuizViewProps) {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
   const [isQuizFinished, setIsQuizFinished] = useState(false);
+  const [hiddenOptions, setHiddenOptions] = useState<Set<string>>(new Set());
+  const [powerupsUsed, setPowerupsUsed] = useState({ fiftyFifty: false, timeBoost: false });
 
   useEffect(() => {
     setLoading(true);
@@ -42,6 +44,7 @@ export function QuizView({ province, onComplete, onExit }: QuizViewProps) {
 
   const handleNextQuestion = useCallback(() => {
     setSelectedAnswer(null);
+    setHiddenOptions(new Set());
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
       setTimeLeft(QUIZ_TIME_LIMIT);
@@ -50,6 +53,27 @@ export function QuizView({ province, onComplete, onExit }: QuizViewProps) {
       setShowCompletionModal(true);
     }
   }, [currentQuestionIndex, questions.length]);
+
+  const useFiftyFifty = () => {
+    if (powerupsUsed.fiftyFifty || selectedAnswer) return;
+
+    const currentQuestion = questions[currentQuestionIndex];
+    const wrongAnswers = currentQuestion.options.filter(opt => opt !== currentQuestion.correctAnswer);
+
+    // Randomly remove 2 wrong answers
+    const shuffled = [...wrongAnswers].sort(() => Math.random() - 0.5);
+    const toHide = shuffled.slice(0, 2);
+
+    setHiddenOptions(new Set(toHide));
+    setPowerupsUsed(prev => ({ ...prev, fiftyFifty: true }));
+  };
+
+  const useTimeBoost = () => {
+    if (powerupsUsed.timeBoost || selectedAnswer) return;
+
+    setTimeLeft(prev => prev + 15);
+    setPowerupsUsed(prev => ({ ...prev, timeBoost: true }));
+  };
 
   useEffect(() => {
     if (loading || isQuizFinished || selectedAnswer) return;
@@ -138,30 +162,43 @@ export function QuizView({ province, onComplete, onExit }: QuizViewProps) {
             <CardHeader className="text-center">
               {currentQuestion.imageUrl && (
                 <div className="relative w-full h-48 md:h-64 mb-4 rounded-t-lg overflow-hidden">
-                   <Image 
-                     src={currentQuestion.imageUrl} 
-                     alt={`Câu hỏi về ${province.name}`}
-                     data-ai-hint="vietnam landscape"
-                     layout="fill"
-                     objectFit="cover"
-                   />
+                   {/* Use img tag for data URIs since Next.js Image doesn't support them */}
+                   {currentQuestion.imageUrl.startsWith('data:') ? (
+                     <img
+                       src={currentQuestion.imageUrl}
+                       alt={`Câu hỏi về ${province.name}`}
+                       className="w-full h-full object-cover"
+                     />
+                   ) : (
+                     <Image
+                       src={currentQuestion.imageUrl}
+                       alt={`Câu hỏi về ${province.name}`}
+                       fill
+                       className="object-cover"
+                     />
+                   )}
                 </div>
               )}
               <CardTitle className="text-xl md:text-2xl px-4">{currentQuestion.question}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                {currentQuestion.options.map((option, index) => (
-                  <Button
-                    key={index}
-                    onClick={() => handleAnswerSelect(option)}
-                    disabled={!!selectedAnswer}
-                    className={`h-auto p-4 text-lg rounded-lg transition-all duration-300 justify-start text-left shadow-sm border-2 ${getButtonClass(option)}`}
-                  >
-                    <span className="font-bold mr-3">{String.fromCharCode(65 + index)}.</span>
-                    <span className="flex-1 whitespace-normal">{option}</span>
-                  </Button>
-                ))}
+                {currentQuestion.options.map((option, index) => {
+                  const isHidden = hiddenOptions.has(option);
+                  if (isHidden) return null;
+
+                  return (
+                    <Button
+                      key={index}
+                      onClick={() => handleAnswerSelect(option)}
+                      disabled={!!selectedAnswer}
+                      className={`h-auto p-4 text-lg rounded-lg transition-all duration-300 justify-start text-left shadow-sm border-2 ${getButtonClass(option)}`}
+                    >
+                      <span className="font-bold mr-3">{String.fromCharCode(65 + index)}.</span>
+                      <span className="flex-1 whitespace-normal">{option}</span>
+                    </Button>
+                  );
+                })}
               </div>
             </CardContent>
           </Card>
@@ -169,8 +206,22 @@ export function QuizView({ province, onComplete, onExit }: QuizViewProps) {
         
         <footer className="mt-4 flex justify-between items-center">
           <div className="flex gap-2">
-            <Button variant="outline" className="bg-white/80" disabled><Bomb className="mr-2"/> 50/50</Button>
-            <Button variant="outline" className="bg-white/80" disabled><Clock className="mr-2"/> +15 giây</Button>
+            <Button
+              variant="outline"
+              className="bg-white/80 hover:bg-primary/20"
+              disabled={powerupsUsed.fiftyFifty || !!selectedAnswer}
+              onClick={useFiftyFifty}
+            >
+              <Bomb className="mr-2"/> 50/50
+            </Button>
+            <Button
+              variant="outline"
+              className="bg-white/80 hover:bg-primary/20"
+              disabled={powerupsUsed.timeBoost || !!selectedAnswer}
+              onClick={useTimeBoost}
+            >
+              <Clock className="mr-2"/> +15 giây
+            </Button>
           </div>
           <div className="text-2xl font-bold bg-white/80 px-4 py-2 rounded-full shadow-md w-20 h-20 flex items-center justify-center border-4 border-primary">
             {timeLeft}

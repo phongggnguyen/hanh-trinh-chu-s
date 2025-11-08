@@ -11,7 +11,22 @@ export async function getQuizForProvince(provinceName: string): Promise<QuizQues
     if (!questions || questions.length === 0) {
       throw new Error("No questions generated.");
     }
-    
+
+    // LOG: Hiển thị câu hỏi và đáp án để kiểm tra
+    console.log('\n========================================');
+    console.log(`📍 TỈNH: ${provinceName}`);
+    console.log('========================================');
+    questions.forEach((q, index) => {
+      console.log(`\n❓ Câu ${index + 1}: ${q.question}`);
+      console.log(`   Đáp án:`);
+      q.options.forEach((opt, i) => {
+        const isCorrect = opt === q.correctAnswer;
+        console.log(`   ${isCorrect ? '✅' : '  '} ${String.fromCharCode(65 + i)}. ${opt}`);
+      });
+      console.log(`   ✔️ Đáp án đúng: ${q.correctAnswer}`);
+    });
+    console.log('========================================\n');
+
     const questionsWithImages = await Promise.all(
         questions.map(async (q) => {
             try {
