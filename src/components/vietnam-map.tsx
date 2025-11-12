@@ -23,7 +23,7 @@ export function VietnamMap({ onProvinceSelect }: VietnamMapProps) {
     <div className="w-full min-h-[500px] flex items-center justify-center">
       <TooltipProvider>
         <svg
-          viewBox="400 50 250 950"
+          viewBox="0 0 1000 1000"
           xmlns="http://www.w3.org/2000/svg"
           className="w-full h-full max-h-[80vh] object-contain"
           aria-label="Bản đồ Việt Nam"

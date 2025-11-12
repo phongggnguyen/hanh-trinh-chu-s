@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir /s \"C:\\Users\\nchd3\\OneDrive\\Máy tính\\claude code\\hanh-trinh-chu-s\\src\")",
+      "Bash(find:*)",
+      "Bash(tree:*)",
+      "Bash(node extract-svg-paths.js:*)",
+      "Bash(node update-provinces.js:*)",
+      "Bash(node apply-svg-paths.js:*)",
+      "Bash(npm run typecheck:*)",
+      "Bash(del extract-svg-paths.js update-provinces.js apply-svg-paths.js svg-provinces.json province-mapping.json)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
