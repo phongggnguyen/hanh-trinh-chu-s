@@ -68,6 +68,8 @@ export function VietnamMap({ onProvinceSelect }: VietnamMapProps) {
               );
             })}
           </g>
+          <text x="830" y="440" className="text-sm fill-gray-600 font-sans">Quần đảo Hoàng Sa</text>
+          <text x="730" y="650" className="text-sm fill-gray-600 font-sans">Quần đảo Trường Sa</text>
         </svg>
       </TooltipProvider>
     </div>
