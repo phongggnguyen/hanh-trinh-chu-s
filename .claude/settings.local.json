@@ -8,7 +8,9 @@
       "Bash(node update-provinces.js:*)",
       "Bash(node apply-svg-paths.js:*)",
       "Bash(npm run typecheck:*)",
-      "Bash(del extract-svg-paths.js update-provinces.js apply-svg-paths.js svg-provinces.json province-mapping.json)"
+      "Bash(del extract-svg-paths.js update-provinces.js apply-svg-paths.js svg-provinces.json province-mapping.json)",
+      "Bash(node test-image-generation.js:*)",
+      "Bash(del test-image-generation.js)"
     ],
     "deny": [],
     "ask": []

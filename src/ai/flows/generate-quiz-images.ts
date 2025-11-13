@@ -42,20 +42,30 @@ const generateQuizImagesFlow = imageAI.defineFlow(
     outputSchema: GenerateQuizImagesOutputSchema,
   },
   async input => {
-    const {media} = await imageAI.generate({
-      // IMPORTANT: ONLY the googleai/gemini-2.5-flash-image model is able to generate images.
-      // model: 'googleai/gemini-2.5-flash-image',
-      model: 'googleai/gemini‑2.5‑flash‑image‑preview',
-      prompt: `Generate a photorealistic and culturally relevant image for the following Vietnamese quiz question: "${input.question}"`,
-      config: {
-        responseModalities: ['TEXT', 'IMAGE'], // MUST provide both TEXT and IMAGE, IMAGE only won't work
-      },
-    });
+    try {
+      console.log(`🎨 Generating image for question: "${input.question}"`);
 
-    if (!media || !media.url) {
-      throw new Error('Failed to generate image.');
+      const {media} = await imageAI.generate({
+        // Using Gemini 2.5 Flash Image model for image generation
+        model: 'googleai/gemini-2.5-flash-image',
+        prompt: `Generate a photorealistic and culturally relevant image for the following Vietnamese quiz question: "${input.question}".
+        The image should be vibrant, high-quality, and appropriate for educational content about Vietnam.`,
+        config: {
+          responseModalities: ['TEXT', 'IMAGE'], // MUST provide both TEXT and IMAGE, IMAGE only won't work
+        },
+      });
+
+      if (!media || !media.url) {
+        console.error('❌ No media returned from image generation');
+        throw new Error('Failed to generate image - no media returned.');
+      }
+
+      console.log(`✅ Image generated successfully: ${media.url.substring(0, 100)}...`);
+      return {imageUrl: media.url};
+
+    } catch (error) {
+      console.error('❌ Error in image generation flow:', error);
+      throw error;
     }
-
-    return {imageUrl: media.url};
   }
 );

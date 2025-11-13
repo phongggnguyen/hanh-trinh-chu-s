@@ -27,21 +27,26 @@ export async function getQuizForProvince(provinceName: string): Promise<QuizQues
     });
     console.log('========================================\n');
 
-    const questionsWithImages = await Promise.all(
-        questions.map(async (q) => {
+    // TEMPORARY: Disable image generation to save API quota
+    // Uncomment below to enable image generation when quota is available
+    const ENABLE_IMAGE_GENERATION = false; // Set to true when API quota is restored
+
+    const questionsWithImages = ENABLE_IMAGE_GENERATION
+      ? await Promise.all(
+          questions.map(async (q) => {
             try {
-                const imageResult = await generateQuizImages({ question: q.question });
-                return {
-                    ...q,
-                    imageUrl: imageResult.imageUrl,
-                };
+              const imageResult = await generateQuizImages({ question: q.question });
+              return {
+                ...q,
+                imageUrl: imageResult.imageUrl,
+              };
             } catch (imageError) {
-                console.error(`Failed to generate image for question: "${q.question}"`, imageError);
-                // Return question without image if image generation fails
-                return { ...q, imageUrl: "" };
+              console.error(`Failed to generate image for question: "${q.question}"`, imageError);
+              return { ...q, imageUrl: "" };
             }
-        })
-    );
+          })
+        )
+      : questions.map(q => ({ ...q, imageUrl: "" })); // No images - save quota
 
     return questionsWithImages;
 
